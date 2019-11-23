@@ -7,5 +7,6 @@
 - 本项目存有本人的SteamApiKey，请将其替换为您本人的SteamApiKey，否则出现任何情况本人一概不负责。
 - 使用前请Star一下。
 
-#### 公开API
-- Get https://taskeren.cn/steamprofile.php?steamids=$需要查询的SteamID64$
+#### TODO
+- 预计将会添加一些其他平台的查询。
+- 等待WarframeApi2推出，添加Warframe玩家在线查询功能。
