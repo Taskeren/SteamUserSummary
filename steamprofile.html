@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Steam User Summary</title>
+        <meta charset="UTF-8">
+        <link href="https://paugram.com/usr/themes/single/static/kico.css" rel="stylesheet" type="text/css"/>
+        <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1"/>
+    </head>
+    <body class="wrap min">
+        <div>
+            <fieldset>
+                <input id="steamid" type="text" placeholder="steamid" onkeypress="javascript:fetchdata()">
+            </fieldset>
+        </div>
+        <div>
+            <a class="btn red" href="javascript:fetchdata('76561198313680485')">Taskeren</a>
+            <a class="btn blue" href="javascript:fetchdata('76561198325267007')">KingKong</a>
+            <a class="btn yellow" href="javascript:fetchdata('76561198323939505')">FiveWillow</a>
+        </div>
+        <div id="data">
+            <table class="fill">
+                <thead>
+                    <tr>
+                        <th>类型</th>
+                        <th>数据</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>SteamID</td>
+                        <td id="d-steamid">/</td>
+                    </tr>
+                    <tr>
+                        <td>玩家名称</td>
+                        <td id="d-nickname">/</td>
+                    </tr>
+                    <tr>
+                        <td>个人主页</td>
+                        <td id="d-profile">/</td>
+                    </tr>
+                    <tr>
+                        <td>正在游玩</td>
+                        <td id="d-playing">/</td>
+                    </tr>
+                    <tr>
+                        <td>游戏ID</td>
+                        <td id="d-gameid">/</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <div>
+            <h4>SteamProfile 使用方法</h4>
+            <p>GET https://taskeren.cn/steamprofile.php?steamids=<b>[需要查询的SteamID64]</b></p>
+        </div>
+    </body>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://works.paugram.com/style/static/kico.js"></script>
+    <script>
+
+    function fetchdata(steamid) {
+        if(steamid == undefined) {
+            steamid = $("#steamid").val();
+        }
+
+        console.log("正在查询玩家", steamid, "的Steam记录。");
+
+        $.ajax({
+            type: "GET",
+            data: {
+                steamids: steamid
+            },
+            url: "steamprofile.php",
+            success: function(data) {
+                console.log(data);
+                var player = data.response.players[0];
+
+                if(player.gameextrainfo == undefined) player.gameextrainfo = "/";
+                if(player.gameid == undefined) player.gameid = "/";
+
+                $("#d-steamid").html(player.steamid);
+                $("#d-nickname").html(player.personaname);
+                $("#d-profile").html("<a href='"+player.profileurl+"'>"+player.profileurl+"</a>");
+                $("#d-playing").html(player.gameextrainfo);
+                $("#d-gameid").html(player.gameid);
+            },
+            error: function(err) {
+                console.error(err);
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        var steamid = window.location.hash.substr(1) || window.location.search.substr(1);
+        if(steamid != undefined && steamid != "") {
+            $("#steamid").val(steamid);
+            fetchdata();
+        }
+    });
+
+    </script>
+</html>
