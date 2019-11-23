@@ -12,11 +12,6 @@
                 <input id="steamid" type="text" placeholder="steamid" onkeypress="javascript:fetchdata()">
             </fieldset>
         </div>
-        <div>
-            <a class="btn red" href="javascript:fetchdata('76561198313680485')">Taskeren</a>
-            <a class="btn blue" href="javascript:fetchdata('76561198325267007')">KingKong</a>
-            <a class="btn yellow" href="javascript:fetchdata('76561198323939505')">FiveWillow</a>
-        </div>
         <div id="data">
             <table class="fill">
                 <thead>
@@ -50,10 +45,7 @@
             </table>
         </div>
         <hr>
-        <div>
-            <h4>SteamProfile 使用方法</h4>
-            <p>GET https://taskeren.cn/steamprofile.php?steamids=<b>[需要查询的SteamID64]</b></p>
-        </div>
+        <p>Copyright &copy; 2019 <a href="https://taskeren.cn">Taskeren</a>. All rights reserved.</p>
     </body>
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://works.paugram.com/style/static/kico.js"></script>
@@ -72,6 +64,9 @@
                 steamids: steamid
             },
             url: "steamprofile.php",
+            beforeSend: function() {
+                ks.notice("正在获取信息", { time: 1500 });
+            },
             success: function(data) {
                 console.log(data);
                 var player = data.response.players[0];

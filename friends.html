@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Steam User Summary</title>
+        <meta charset="UTF-8">
+        <link href="https://paugram.com/usr/themes/single/static/kico.css" rel="stylesheet" type="text/css"/>
+        <meta name="viewport" content="width=device-width, maximum-scale=1, initial-scale=1"/>
+    </head>
+    <body class="wrap min">
+        <div>
+            <table class="fill">
+                <thead>
+                    <td>玩家名称</td>
+                    <td>SteamID</td>
+                    <td>正在游玩</td>
+                </thead>
+                <tbody id="list">
+
+                </tbody>
+            </table>
+        </div>
+    </body>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://works.paugram.com/style/static/kico.js"></script>
+    <script>
+
+        function fetchdata(steamid) {
+            if(steamid == undefined) {
+                console.error("SteamID64 不能为空！")
+                return;
+            }
+
+            console.log("正在查询玩家", steamid, "的Steam记录。");
+
+            $.ajax({
+                type: "GET",
+                data: {
+                    steamids: steamid
+                },
+                url: "steamprofile.php",
+                success: function(data) {
+                    console.log(data);
+                    var player = data.response.players[0];
+                    
+                    if(player.gameextrainfo == undefined) player.gameextrainfo = "/";
+                    if(player.gameid == undefined) player.gameid = "/";
+
+                    var tr = document.createElement("tr");
+                    tr.appendChild(createTd("<a href='steamprofile.html?"+player.steamid+"'>"+player.personaname+"</a>"));
+                    tr.appendChild(createTd(player.steamid));
+                    tr.appendChild(createTd(player.gameextrainfo));
+
+                    document.getElementById("list").appendChild(tr);
+                },
+                error: function(err) {
+                    console.error(err);
+                }
+            });
+        }
+
+        function createTd(data) {
+            var td = document.createElement("td");
+            td.innerHTML = data;
+            return td;
+        }
+
+        $(document).ready(function() {
+            fetchdata("76561198313680485");
+            fetchdata("76561198264647647");
+            fetchdata("76561198325267007");
+            fetchdata("76561198323939505");
+        });
+
+    </script>
+</html>
